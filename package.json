@@ -1,0 +1,33 @@
+{
+  "name": "moltbook-automation",
+  "version": "3.0.0",
+  "description": "Moltbook 自动化运营系统 - 智能内容发布、自动互动、指标追踪和 OKR 管理",
+  "main": "src/index.js",
+  "bin": {
+    "moltbook-automation": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest",
+    "test:unit": "jest tests/unit",
+    "test:integration": "jest tests/integration"
+  },
+  "keywords": [
+    "moltbook",
+    "automation",
+    "social-media",
+    "agent",
+    "openclaw"
+  ],
+  "author": "Charpup",
+  "license": "MIT",
+  "dependencies": {
+    "yaml": "^2.3.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
