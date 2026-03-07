@@ -12,6 +12,7 @@ const MetricsCollector = require('./core/metrics');
 const EngagementManager = require('./core/engagement');
 const ContentGenerator = require('./core/content');
 const OKRTracker = require('./core/okr');
+const Publisher = require('./publisher');
 
 // Load utils
 const Logger = require('./utils/logger');
