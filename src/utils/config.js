@@ -6,15 +6,22 @@
 const fs = require('fs');
 const path = require('path');
 const YAML = require('yaml');
+const dotenv = require('dotenv');
 
 class Config {
   constructor(configPath = null) {
     this.skillDir = path.join(process.env.HOME, '.openclaw/skills/moltbook-automation');
     this.configPath = configPath || process.env.MOLTBOOK_CONFIG_PATH;
+
+    // Load env from skill-local .env if present (cron/CLI stability)
+    const localEnv = path.join(this.skillDir, '.env');
+    if (fs.existsSync(localEnv)) {
+      dotenv.config({ path: localEnv });
+    }
     
     this.defaults = {
       moltbook: {
-        apiBase: process.env.MOLTBOOK_API_BASE || 'https://moltbook.com/api/v1',
+        apiBase: process.env.MOLTBOOK_API_BASE || 'https://www.moltbook.com/api/v1',
         apiKey: process.env.MOLTBOOK_API_KEY
       },
       automation: {
@@ -32,10 +39,10 @@ class Config {
         suggestionLimit: 5
       },
       okr: {
-        karmaTarget: 5000,
-        followersTarget: 1000,
-        weeklyPostsTarget: 3,
-        weeklyCommentsTarget: 20
+        karmaTarget: 120,
+        followersTarget: 18,
+        weeklyPostsTarget: 6,
+        weeklyCommentsTarget: 126
       }
     };
     
@@ -50,7 +57,7 @@ class Config {
     if (this.configPath && fs.existsSync(this.configPath)) {
       try {
         const content = fs.readFileSync(this.configPath, 'utf8');
-        return this.merge(this.defaults, this.parse(content));
+        return this.merge(this.defaults, this.normalizeKeys(this.parse(content)));
       } catch (e) {
         console.warn(`Failed to load config from ${this.configPath}:`, e.message);
       }
@@ -61,7 +68,7 @@ class Config {
     if (fs.existsSync(defaultConfig)) {
       try {
         const content = fs.readFileSync(defaultConfig, 'utf8');
-        return this.merge(this.defaults, this.parse(content));
+        return this.merge(this.defaults, this.normalizeKeys(this.parse(content)));
       } catch (e) {
         console.warn(`Failed to load config from ${defaultConfig}:`, e.message);
       }
@@ -80,6 +87,26 @@ class Config {
       // Try JSON
       return JSON.parse(content);
     }
+  }
+
+  /**
+   * Convert snake_case keys to camelCase recursively
+   */
+  normalizeKeys(input) {
+    if (Array.isArray(input)) {
+      return input.map(v => this.normalizeKeys(v));
+    }
+
+    if (!input || typeof input !== 'object') {
+      return input;
+    }
+
+    const out = {};
+    for (const [key, value] of Object.entries(input)) {
+      const camel = key.replace(/_([a-z])/g, (_, c) => c.toUpperCase());
+      out[camel] = this.normalizeKeys(value);
+    }
+    return out;
   }
 
   /**

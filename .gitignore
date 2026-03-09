@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Env & secrets
+.env
+.env.*
+
+# Logs
+*.log
+logs/
+
+# Runtime/cache
+.tmp/
+tmp/
+.cache/
+coverage/
+
+# OS / Editor
+.DS_Store
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Test outputs
+junit.xml

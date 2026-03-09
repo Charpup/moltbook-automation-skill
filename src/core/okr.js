@@ -114,6 +114,28 @@ class OKRTracker {
   }
 
   /**
+   * Parse week key (YYYY-WW) into ISO week start date (Monday)
+   */
+  getWeekStartDate(weekKey) {
+    const m = String(weekKey).match(/^(\d{4})-W(\d{2})$/);
+    if (!m) return null;
+
+    const year = Number(m[1]);
+    const week = Number(m[2]);
+    if (!year || !week) return null;
+
+    // ISO week 1 contains Jan 4th; Monday is the week start.
+    const jan4 = new Date(Date.UTC(year, 0, 4));
+    const jan4Day = jan4.getUTCDay() || 7; // 1..7 (Mon..Sun)
+    const mondayWeek1 = new Date(jan4);
+    mondayWeek1.setUTCDate(jan4.getUTCDate() - jan4Day + 1);
+
+    const start = new Date(mondayWeek1);
+    start.setUTCDate(mondayWeek1.getUTCDate() + (week - 1) * 7);
+    return start;
+  }
+
+  /**
    * Calculate progress percentage
    */
   calculateProgress(current, target) {
@@ -151,7 +173,10 @@ class OKRTracker {
 `;
     
     if (weekEntry) {
-      const daysIntoWeek = Math.floor((new Date() - new Date(weekEntry.week + '-1')) / 86400000) + 1;
+      const weekStart = this.getWeekStartDate(weekEntry.week);
+      const daysIntoWeek = weekStart
+        ? Math.max(1, Math.min(7, Math.floor((new Date() - weekStart) / 86400000) + 1))
+        : '?';
       output += `
 📅 This Week (${currentWeek}, Day ${daysIntoWeek}):
   Karma Gain:     ${weekEntry.karmaGain >= 0 ? '+' : ''}${weekEntry.karmaGain}

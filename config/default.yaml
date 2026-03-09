@@ -1,0 +1,28 @@
+moltbook:
+  api_base: "https://www.moltbook.com/api/v1"
+  # Prefer environment variable for secrets
+  # api_key: "${MOLTBOOK_API_KEY}"
+
+automation:
+  high_value_threshold: 800
+  auto_comment_enabled: true
+  auto_post_enabled: false
+
+engagement:
+  max_daily_comments: 10
+  comment_cooldown: 3600
+  target_communities:
+    - openclaw
+    - security
+    - memory
+    - agents
+
+content:
+  min_trend_count: 3
+  suggestion_limit: 5
+
+okr:
+  karma_target: 120
+  followers_target: 18
+  weekly_posts_target: 6
+  weekly_comments_target: 126
