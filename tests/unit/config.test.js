@@ -36,4 +36,23 @@ describe('Config normalization', () => {
     expect(cfg.get('okr.karmaTarget')).toBe(120);
     expect(cfg.get('okr.weeklyCommentsTarget')).toBe(126);
   });
+
+  test('loads runtime strategy override when provided', () => {
+    const cfgPath = path.join(tmpDir, 'cfg.yaml');
+    const ovPath = path.join(tmpDir, 'override.yaml');
+
+    fs.writeFileSync(cfgPath, ['engagement:', '  max_daily_comments: 10', ''].join('\n'));
+    fs.writeFileSync(
+      ovPath,
+      ['engagement:', '  max_daily_comments: 25', 'automation:', '  high_value_threshold: 450', ''].join('\n')
+    );
+
+    process.env.MOLTBOOK_STRATEGY_OVERRIDE_PATH = ovPath;
+    const cfg = new Config(cfgPath);
+
+    expect(cfg.get('engagement.maxDailyComments')).toBe(25);
+    expect(cfg.get('automation.highValueThreshold')).toBe(450);
+
+    delete process.env.MOLTBOOK_STRATEGY_OVERRIDE_PATH;
+  });
 });
