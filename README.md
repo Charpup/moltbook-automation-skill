@@ -99,3 +99,4 @@ Unit tests:
 ## License
 
 MIT
+- 2026-03-11: Skill audit upgrade — normalized SKILL.md frontmatter to `name` + `description`, revalidated trigger wording, and rechecked lightweight lint/smoke compatibility with OpenClaw.

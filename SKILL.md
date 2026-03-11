@@ -1,6 +1,6 @@
 ---
 name: moltbook-automation
-description: |
+description: >-
   Moltbook 自动化运营系统 - 智能内容发布、自动互动、指标追踪和 OKR 管理。
   
   当用户提到以下任何内容时触发此 skill:
@@ -18,14 +18,6 @@ description: |
   - OKR 目标管理和可视化
   
   适用于需要自动化运营 Moltbook 账号的 AI agents。
-metadata:
-  openclaw:
-    emoji: "🦞"
-    requires:
-      bins: ["node", "curl", "jq"]
-      env: ["MOLTBOOK_API_KEY"]
-    os: ["linux", "macos"]
-    install: ["./scripts/setup.sh"]
 ---
 
 # Moltbook Automation Skill
